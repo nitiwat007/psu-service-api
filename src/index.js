@@ -3,13 +3,10 @@ import path from 'path'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import Promise from 'bluebird'
-//import dotenv from 'dotenv'
 import cors from 'cors'
 
 import passport from './routes/passport'
 import event from './routes/event'
-import student from './routes/student'
-//import excel from './routes/excel'
 import graphql from './routes/graphql'
 import studentGraphql from './routes/studentGraphql'
 
@@ -27,14 +24,12 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 mongoose.Promise = Promise
-mongoose.connect(process.env.MONGODB_URL_APP_LOGS)
+mongoose.connect(process.env.MONGODB_URL_APP_LOGS,{useNewUrlParser: true})
 
 
 app.use("/api/passport", passport)
 app.use("/api", event)
-//app.use("/api/student", student)
 app.use("/api/student", studentGraphql)
-//app.use("/api/excel", excel)
 app.use("/api/graphql", graphql)
 
 app.get("/*", (req, res) => {

@@ -105,6 +105,58 @@ var grade = (STUDENT_ID) => {
     )
 }
 
+var advisor = (STUDENT_ID) => {
+    return new Promise(
+        (resolve, reject) => {
+            oracledb.getConnection({
+                user: process.env.ORACLE_REGIST2005NEW_USER,
+                password: process.env.ORACLE_REGIST2005NEW_PASS,
+                connectString: process.env.ORACLE_REGIST2005NEW_CONNECTION_STRING
+            },
+                (err, connection) => {
+                    if (err) {
+                        console.log(err.message)
+                        return
+                    }
+                    connection.execute(
+                        "select" +
+                        " regist2005_new.advisory.STUDENT_ID" +
+                        ",regist2005_new.advisory.ADVISER_ID" +
+                        ",regist2005_new.title.TITLE_NAME_THAI" +
+                        ",regist2005_new.title.TITLE_NAME_ENG" +
+                        ",regist2005_new.lecturer.LECTURER_NAME_THAI as ADVISOR_NAME_THAI" +
+                        ",regist2005_new.lecturer.LECTURER_SNAME_THAI as ADVISOR_SNAME_THAI" +
+                        ",regist2005_new.lecturer.LECTURER_NAME_ENG as ADVISOR_NAME_ENG" +
+                        ",regist2005_new.lecturer.LECTURER_SNAME_ENG as ADVISOR_SNAME_ENG" +
+                        ",regist2005_new.advisory.BEGIN_DATE" +
+                        ",regist2005_new.advisory.END_DATE" +
+                        ",regist2005_new.advisory.IS_THESIS_ADVISER" +
+                        ",regist2005_new.advisory.ADVISER_ORDER" +
+                        " from regist2005_new.advisory" +
+                        " inner join regist2005_new.lecturer" +
+                        " on regist2005_new.advisory.ADVISER_ID = regist2005_new.lecturer.LECTURER_ID" +
+                        " inner join regist2005_new.title" +
+                        " on regist2005_new.lecturer.TITLE_ID = regist2005_new.title.TITLE_ID" +
+                        " where regist2005_new.advisory.STUDENT_ID=:STUDENT_ID order by regist2005_new.advisory.ADVISER_ORDER", [STUDENT_ID],
+                        {
+                            outFormat: oracledb.OBJECT
+                        },
+                        (err, result) => {
+                            if (err) {
+                                reject(err.message)
+                                doRelease(connection)
+                                return
+                            }
+                            resolve(result.rows)
+                            doRelease(connection)
+                        }
+                    )
+                }
+            )
+        }
+    )
+}
+
 function doRelease(connection) {
     connection.close(
         function (err) {
@@ -117,5 +169,6 @@ function doRelease(connection) {
 
 export default {
     student: student,
-    grade: grade
+    grade: grade,
+    advisor:advisor
 }

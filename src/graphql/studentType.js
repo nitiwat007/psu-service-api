@@ -12,11 +12,11 @@ const studentType = new GraphQLObjectType({
     fields: () => ({
         STUDENT_ID: {
             type: GraphQLString,
-            description: 'Student ID'
+            description: 'ID of student'
         },
         STUD_NAME_THAI: {
             type: GraphQLString,
-            description: 'Firstname thia of student'
+            description: 'Firstname thai of student'
         },
         STUD_SNAME_THAI: {
             type: GraphQLString,
