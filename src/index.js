@@ -9,6 +9,7 @@ import passport from './routes/passport'
 import event from './routes/event'
 import graphql from './routes/graphql'
 import studentGraphql from './routes/studentGraphql'
+import staffGraphql from './routes/staffGraphql'
 
 
 const app = express()
@@ -30,6 +31,7 @@ mongoose.connect(process.env.MONGODB_URL_APP_LOGS,{useNewUrlParser: true})
 app.use("/api/passport", passport)
 app.use("/api", event)
 app.use("/api/student", studentGraphql)
+app.use("/api/staff", staffGraphql)
 app.use("/api/graphql", graphql)
 
 app.get("/*", (req, res) => {

@@ -1,6 +1,7 @@
 import studentType from '../graphql/studentType'
 import gradeType from '../graphql/gradeType'
 import AdvisorType from '../graphql/advisorType'
+import gpaType from '../graphql/gpaType'
 import {
     GraphQLSchema,
     GraphQLObjectType,
@@ -34,6 +35,18 @@ const getStudentGrade = {
     }
 }
 
+const getStudentGPA = {
+    type: GraphQLList(gpaType),
+    args: {
+        STUDENT_ID: {
+            type: GraphQLString
+        }
+    },
+    resolve: (_, args) => {
+        return student.gpa(args.STUDENT_ID).then(data => data)
+    }
+}
+
 const getStudentAdvisor = {
     type: GraphQLList(AdvisorType),
     args: {
@@ -49,5 +62,6 @@ const getStudentAdvisor = {
 export default {
     getStudentInfo: getStudentInfo,
     getStudentGrade: getStudentGrade,
+    getStudentGPA: getStudentGPA,
     getStudentAdvisor: getStudentAdvisor
 }

@@ -17,6 +17,7 @@ const queryType = new GraphQLObjectType({
     fields: () => ({
         getStudentInfo: studentQueryFields.getStudentInfo,
         getStudentGrade: studentQueryFields.getStudentGrade,
+        getStudentGPA: studentQueryFields.getStudentGPA,
         getStudentAdvisor: studentQueryFields.getStudentAdvisor
     })
 })

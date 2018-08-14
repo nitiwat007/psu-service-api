@@ -105,6 +105,47 @@ var grade = (STUDENT_ID) => {
     )
 }
 
+var gpa = (STUDENT_ID) => {
+    return new Promise(
+        (resolve, reject) => {
+            oracledb.getConnection({
+                user: process.env.ORACLE_REGIST2005NEW_USER,
+                password: process.env.ORACLE_REGIST2005NEW_PASS,
+                connectString: process.env.ORACLE_REGIST2005NEW_CONNECTION_STRING
+            },
+                (err, connection) => {
+                    if (err) {
+                        console.log(err.message)
+                        return
+                    }
+                    connection.execute(
+                        "select" +
+                        " regist2005_new.gpa.STUDENT_ID" +
+                        " ,regist2005_new.gpa.EDU_TERM" +
+                        " ,regist2005_new.gpa.EDU_YEAR" +
+                        " ,regist2005_new.gpa.SEM_GPA" + 
+                        " ,regist2005_new.gpa.CUM_GPA" +
+                        " from regist2005_new.gpa" +
+                        " where regist2005_new.gpa.STUDENT_ID=:STUDENT_ID order by regist2005_new.gpa.EDU_YEAR desc, regist2005_new.gpa.EDU_TERM desc", [STUDENT_ID],
+                        {
+                            outFormat: oracledb.OBJECT
+                        },
+                        (err, result) => {
+                            if (err) {
+                                reject(err.message)
+                                doRelease(connection)
+                                return
+                            }
+                            resolve(result.rows)
+                            doRelease(connection)
+                        }
+                    )
+                }
+            )
+        }
+    )
+}
+
 var advisor = (STUDENT_ID) => {
     return new Promise(
         (resolve, reject) => {
@@ -170,5 +211,6 @@ function doRelease(connection) {
 export default {
     student: student,
     grade: grade,
+    gpa:gpa,
     advisor:advisor
 }

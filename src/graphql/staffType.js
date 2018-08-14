@@ -21,6 +21,20 @@ const staffType = new GraphQLObjectType({
         STAFF_SNAME_THAI:{
             type: GraphQLString,
             description:'Lastname thai of staff'
-        }
+        },
+        STAFF_NAME_ENG:{
+            type: GraphQLString,
+            description:'Firstname eng of staff'
+        },
+        STAFF_SNAME_ENG:{
+            type: GraphQLString,
+            description:'Lastname eng of staff'
+        },
+        FAC_ID:{
+            type: GraphQLString,
+            description:'FacID  of staff'
+        },
     })
 })
+
+export default staffType
